@@ -8,22 +8,17 @@ import {
     enableHelpersPlugin, 
     enableCacheSweepers, 
     enablePermissionsPlugin,
-    Collection
+    Collection,
+    GatewayIntents
 } from "./deps.ts";
-import { dotenv } from "./deps.ts";
+import { configs } from "./configs.ts";
 import { Command } from "./src/types/commands.ts";
 
-dotenv({ export: true });
-
 const bot = createBot({
-    token: Deno.env.get("DISCORD_TOKEN"),
-    intents: Intents.Guilds | Intents.GuildMessages,
-    events: {
-        ready() {
-            console.log("Successfully connected to gateway");
-        },
-        
-    },
+    token: configs.token,
+    botId: configs.botId,
+    intents: GatewayIntents.Guilds,
+    events: {},
 });
 
 enableHelpersPlugin(bot);
@@ -37,5 +32,3 @@ export interface BotClient extends BotWithCache<BotWithHelpersPlugin> {
 
 export const Bot = bot as BotClient;
 Bot.commands = new Collection();
-
-await startBot(bot);

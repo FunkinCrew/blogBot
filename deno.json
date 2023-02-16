@@ -1,6 +1,6 @@
 {
     "tasks": {
-        "start": "deno run --allow-read --allow-env --allow-net --watch first_steps.ts"
+        "start": "deno run -A --watch mod.ts"
     },
     "lint": {
       "rules": {

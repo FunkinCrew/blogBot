@@ -6,5 +6,6 @@ export interface Command {
     description: string,
     type: ApplicationCommandTypes,
     options?: ApplicationCommandOption[],
+    devOnly?: boolean
     execute: (bot: BotClient, interaction:Interaction) => unknown;
 }
