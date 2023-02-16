@@ -10,5 +10,6 @@ export interface Config {
 
 export const configs = {
     token,
-    botId: BigInt(atob(token.split(".")[0]))
+    botId: BigInt(atob(token.split(".")[0])),
+    devGuildId: BigInt(env.DEV_GUILD_ID),
 }
