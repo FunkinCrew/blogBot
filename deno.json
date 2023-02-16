@@ -1,0 +1,21 @@
+{
+    "tasks": {
+        "start": "deno run --allow-read --allow-env --allow-net --watch first_steps.ts"
+    },
+    "lint": {
+      "rules": {
+        "tags": ["recommended"],
+        "include": ["ban-untagged-todo"],
+        "exclude": ["no-unused-vars"]
+      }
+    },
+    "fmt": {
+      "options": {
+        "useTabs": false,
+        "lineWidth": 120,
+        "indentWidth": 2,
+        "singleQuote": false,
+        "proseWrap": "preserve"
+      }
+    }
+  }
