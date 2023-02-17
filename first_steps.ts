@@ -15,7 +15,7 @@ import { configs } from "./configs.ts";
 import { Command } from "./src/types/commands.ts";
 
 const bot = createBot({
-    token: "MTA3NTU0MzE0NDE1MTY2Mjc1NA.GuxHGA.f-3WZvNyCX5mrXgJVu_XflEeHBUvSVXInglAK4",
+    token: configs.token,
     botId: configs.botId,
     intents: GatewayIntents.Guilds,
     events: {},
