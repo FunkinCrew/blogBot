@@ -1,17 +1,13 @@
 import { dotenv } from "./deps.ts";
 
-const env = dotenv({export: true});
+dotenv({export: true});
 const token = Deno.env.get("BOT_TOKEN") || "";
 const gh = Deno.env.get("GH_KEY") || "";
-
-export interface Config {
-    token: string;
-    botId: bigint;
-}
+const devGuildId = Deno.env.get("DEV_GUILD_ID") || "";
 
 export const configs = {
     token,
     botId: BigInt(atob(token.split(".")[0])),
-    devGuildId: BigInt(Deno.env.get("DEV_GUILD_ID") as string),
+    devGuildId,
     gh
 }

@@ -5,6 +5,9 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
+[processes]
+  app = "run -A ./main.ts"
+
 [env]
 
 [experimental]
@@ -12,7 +15,7 @@ processes = []
 
 [[services]]
   http_checks = []
-  internal_port = 8080
+  internal_port = 8000
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
