@@ -9,5 +9,8 @@ Bot.events.interactionCreate = (_, interaction) => {
             console.log(`[Applicatoin command] ${interaction.data.name} command executed.`);
             Bot.commands.get(interaction.data.name!)?.execute(Bot, interaction);
             break;
+        case InteractionTypes.ModalSubmit:
+            console.log("MODAL???");
+            break;
     }
 };
