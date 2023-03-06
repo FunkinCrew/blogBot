@@ -29,12 +29,17 @@ createCommand({
           auth: configs.gh
         });
 
+        let username:string = i.member?.nick as string;
+        if (username == undefined)
+          username = i.member?.user?.username as string;
+
         const authorTag = await octo.issues.createLabel({
           repo: "blog-queue",
           owner: "FunkinCrew",
-          name: i.message?.member?.nick as string,
-          description: "Author"
-        });
+          name: username
+        })
+          .catch(reason => {console.log(reason)})
+          .then(_ => console.log("created label"));
 
         // let shit = await octo.orgs.get({
         //   org:"FunkinCrew"
@@ -45,7 +50,7 @@ createCommand({
           owner:"FunkinCrew",
           title: channel.name as string,
           body: msgs.last()?.content,
-          labels: [authorTag.data.name]
+          labels: [username]
         });
 
 
