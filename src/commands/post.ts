@@ -20,24 +20,32 @@ createCommand({
     execute: async (b:BotClient, i:Interaction) => {
 
         // console.log(i);
-        let msgs = await b.helpers.getMessages(i.channelId as bigint);
-        let channel = await b.helpers.getChannel(msgs.first()?.channelId as BigString)
+        const msgs = await b.helpers.getMessages(i.channelId as bigint);
+        const channel = await b.helpers.getChannel(msgs.first()?.channelId as BigString)
         // msgs.last()?.content
         // channel.name
 
-        let octo = new Octokit({
+        const octo = new Octokit({
           auth: configs.gh
+        });
+
+        const authorTag = await octo.issues.createLabel({
+          repo: "blog-queue",
+          owner: "FunkinCrew",
+          name: i.message?.member?.nick as string,
+          description: "Author"
         });
 
         // let shit = await octo.orgs.get({
         //   org:"FunkinCrew"
         // });
         // console.log(shit);
-        let issueStuff = await octo.issues.create({
+        const issueStuff = await octo.issues.create({
           repo:"blog-queue",
           owner:"FunkinCrew",
           title: channel.name as string,
-          body: msgs.last()?.content
+          body: msgs.last()?.content,
+          labels: [authorTag.data.name]
         });
 
 
@@ -45,7 +53,7 @@ createCommand({
             type: InteractionResponseTypes.ChannelMessageWithSource,
             data: {
                 content: `Posted to the Funkin' Blog Queue!
-                https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`
+https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`
             }
         });
     }
