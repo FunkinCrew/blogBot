@@ -33,17 +33,19 @@ createCommand({
         //   org:"FunkinCrew"
         // });
         // console.log(shit);
-        octo.issues.create({
+        let issueStuff = await octo.issues.create({
           repo:"blog-queue",
           owner:"FunkinCrew",
           title: channel.name as string,
           body: msgs.last()?.content
         });
 
+
         await b.helpers.sendInteractionResponse(i.id, i.token, {
             type: InteractionResponseTypes.ChannelMessageWithSource,
             data: {
-                content: channel.name + "\n" + msgs.last()?.content
+                content: `Posted to the Funkin' Blog Queue!
+                https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`;
             }
         });
     }
