@@ -45,7 +45,7 @@ createCommand({
             type: InteractionResponseTypes.ChannelMessageWithSource,
             data: {
                 content: `Posted to the Funkin' Blog Queue!
-                https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`;
+                https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`
             }
         });
     }
