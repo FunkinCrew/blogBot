@@ -2,7 +2,8 @@ import { Interaction, ApplicationCommandTypes, InteractionResponseTypes, Applica
 import { createCommand } from "./mod.ts";
 import { BotClient } from "../../first_steps.ts";
 import { Octokit } from "npm:@octokit/rest";
-import { configs } from "../../configs.ts"
+import { configs } from "../../configs.ts";
+import { Message } from "../../deps.ts";
 
 createCommand({
     name: "post",
@@ -29,9 +30,11 @@ createCommand({
           auth: configs.gh
         });
 
-        let username:string = i.member?.nick as string;
+        const op:Message = msgs.last() as Message;
+
+        let username:string = op.member?.nick as string;
         if (username == undefined)
-          username = i.member?.user?.username as string;
+          username = op.member?.user?.username as string;
 
         const authorTag = await octo.issues.createLabel({
           repo: "blog-queue",
