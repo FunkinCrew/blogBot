@@ -19,10 +19,17 @@ type StringArgumentDefinition = BaseDefinition & {
     choices?: readonly { name: string; value: string }[];
     required?: false;
   };
+  type BoolOptionalArgumentDefinition = BaseDefinition & {
+    name: string;
+    type: ApplicationCommandOptionTypes.Boolean;
+    choices?: readonly { name: string; value: boolean }[];
+    required?: false;
+  };
 
 export type ArgumentDefinition = 
   | StringArgumentDefinition
-  | StringOptionalArgumentDefinition;
+  | StringOptionalArgumentDefinition
+  | BoolOptionalArgumentDefinition;
 
 export interface Command<T extends readonly ArgumentDefinition[]> {
     name: string, 
