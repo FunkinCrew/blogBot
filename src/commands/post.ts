@@ -78,6 +78,10 @@ createCommand({
       }
     }
 
+    const ytRegex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/igm;
+    postBody = postBody.replaceAll(ytRegex, "{{youtube(id=\"$6\")}}");
+
+
     try {
       console.log(username);
 
