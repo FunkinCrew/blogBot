@@ -63,7 +63,7 @@ createCommand({
       .catch((reason) => {
         console.log(reason);
       })
-      .then((labl) => console.log("created label"));
+      .then((_) => console.log("created label"));
 
     // let shit = await octo.orgs.get({
     //   org:"FunkinCrew"
