@@ -1,24 +1,20 @@
 import {
-  ActionRow,
   ApplicationCommandOptionTypes,
   ApplicationCommandTypes,
   Attachment,
   BigString,
-  ButtonComponent,
   Interaction,
-  InteractionResponseTypes,
-  MessageComponentTypes,
-  TextStyles,
+  InteractionResponseTypes
 } from "../../deps.ts";
 import { createCommand } from "./mod.ts";
 import { BotClient } from "../../first_steps.ts";
-import { Octokit } from "npm:@octokit/rest";
+import { Octokit } from "../../deps.ts";
 import { configs } from "../../configs.ts";
 import { Message } from "../../deps.ts";
 
 createCommand({
-  name: "post",
-  description: "post a dang blog!",
+  name: "queuepost",
+  description: "queues a post to Funkin' blog!!",
   type: ApplicationCommandTypes.ChatInput,
   devOnly: true,
   options: [
@@ -33,8 +29,6 @@ createCommand({
     // console.log(i);
     const msgs = await b.helpers.getMessages(i.channelId as bigint);
     const channel = await b.helpers.getChannel(msgs.first()?.channelId as BigString);
-    // msgs.last()?.content
-    // channel.name
 
     const octo = new Octokit({
       auth: configs.gh,
@@ -45,9 +39,6 @@ createCommand({
     }
 
     const op: Message = msgs.last() as Message;
-
-    console.log(op);
-
     const memb = await b.helpers.getMember(channel.guildId as BigString, op.authorId);
 
     let username: string = memb.nick as string;
@@ -64,11 +55,6 @@ createCommand({
         console.log(reason);
       })
       .then((_) => console.log("created label"));
-
-    // let shit = await octo.orgs.get({
-    //   org:"FunkinCrew"
-    // });
-    // console.log(shit);
 
     let postBody = msgs.last()?.content as string;
 
@@ -93,6 +79,13 @@ createCommand({
         labels: [username],
       });
 
+      await octo.issues.update({
+        repo: "blog-queue",
+        owner: "FunkinCrew",
+        issue_number: issueStuff.data.number,
+        state: "closed"
+      });
+
       await b.helpers.sendInteractionResponse(i.id, i.token, {
         type: InteractionResponseTypes.ChannelMessageWithSource,
         data: {
@@ -113,7 +106,5 @@ createCommand({
 
       throw e;
     }
-
-    
   },
 });

@@ -8,18 +8,17 @@ import {
     Interaction,
     InteractionResponseTypes,
     MessageComponentTypes,
-    TextStyles
+    TextStyles,
   } from "../../deps.ts";
   import { createCommand } from "./mod.ts";
   import { BotClient } from "../../first_steps.ts";
-  import { Octokit } from "../../deps.ts";
-  import { createAppAuth} from "npm:@octokit/auth-app@4.0.13";
+  import { Octokit } from "npm:@octokit/rest";
   import { configs } from "../../configs.ts";
   import { Message } from "../../deps.ts";
   
   createCommand({
-    name: "postall",
-    description: "Posts the entire thread as a single blog post!",
+    name: "weeklyblog",
+    description: "gathers all the blogs in the queue, and posts them!",
     type: ApplicationCommandTypes.ChatInput,
     devOnly: true,
     options: [
@@ -36,23 +35,15 @@ import {
       const channel = await b.helpers.getChannel(msgs.first()?.channelId as BigString);
       // msgs.last()?.content
       // channel.name
-    
-      const privateKeyShit:string = configs.privateGH as string;
-      console.log(privateKeyShit);
-        
+  
       const octo = new Octokit({
-        authStrategy: createAppAuth,
-        auth: {
-            appId: 338014,
-            installationId: 37852018,
-            privateKey: privateKeyShit,
-            type: "installation"}
+        auth: configs.gh,
       });
   
       if (octo != undefined) {
         console.log("Auth'd github properly?");
       }
-      
+  
       const op: Message = msgs.last() as Message;
   
       console.log(op);
@@ -72,15 +63,14 @@ import {
         .catch((reason) => {
           console.log(reason);
         })
-        .then((labl) => console.log("created label"));
+        .then((_) => console.log("created label"));
   
       // let shit = await octo.orgs.get({
       //   org:"FunkinCrew"
       // });
       // console.log(shit);
-        
-      let postBody:string = "";
-      msgs.forEach((msg, k, map) => postBody = msg.content + "\n" + postBody); // reversal... lol!
+  
+      let postBody = msgs.last()?.content as string;
   
       for (const pic of msgs.last()?.attachments as Attachment[]) {
         if (pic.contentType?.startsWith("image")) {
@@ -91,15 +81,16 @@ import {
       const ytRegex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/igm;
       postBody = postBody.replaceAll(ytRegex, "{{youtube(id=\"$6\")}}");
   
+  
       try {
         console.log(username);
-        
+  
         const issueStuff = await octo.issues.create({
           repo: "blog-queue",
           owner: "FunkinCrew",
           title: channel.name as string,
           body: postBody,
-          labels: [username]
+          labels: [username],
         });
   
         await b.helpers.sendInteractionResponse(i.id, i.token, {
