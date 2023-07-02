@@ -4,13 +4,13 @@ import {
   Attachment,
   BigString,
   Interaction,
-  InteractionResponseTypes
+  InteractionResponseTypes,
+  Message,
+  Octokit,
 } from "../../deps.ts";
 import { createCommand } from "./mod.ts";
 import { BotClient } from "../../first_steps.ts";
-import { Octokit } from "../../deps.ts";
 import { configs } from "../../configs.ts";
-import { Message } from "../../deps.ts";
 
 createCommand({
   name: "queuepost",
@@ -36,7 +36,9 @@ createCommand({
 
     if (octo != undefined) {
       console.log("Auth'd github properly?");
-      octo.repos.listForOrg({org:"FunkinCrew", type:"private"}).then((res) => {console.log(res.data.reduce((acc, val) => acc + val.name + "\n\t", ""))});
+      octo.repos.listForOrg({ org: "FunkinCrew", type: "private" }).then((res) => {
+        console.log(res.data.reduce((acc, val) => acc + val.name + "\n\t", ""));
+      });
     }
 
     const op: Message = msgs.last() as Message;
@@ -65,9 +67,9 @@ createCommand({
       }
     }
 
-    const ytRegex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/igm;
-    postBody = postBody.replaceAll(ytRegex, "{{youtube(id=\"$6\")}}");
-
+    const ytRegex =
+      /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/igm;
+    postBody = postBody.replaceAll(ytRegex, '{{youtube(id="$6")}}');
 
     try {
       // console.log(username);
@@ -84,17 +86,16 @@ createCommand({
         repo: "blog-queue",
         owner: "FunkinCrew",
         issue_number: issueStuff.data.number,
-        state: "closed"
+        state: "closed",
       });
 
       await b.helpers.sendInteractionResponse(i.id, i.token, {
         type: InteractionResponseTypes.ChannelMessageWithSource,
         data: {
           content: `Posted to the Funkin' Blog Queue!
-  https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`,
+	https://github.com/FunkinCrew/blog-queue/issues/${issueStuff.data.number}`,
         },
       });
-
     } catch (e) {
       console.log("busted creating the issue!");
       console.log(e);
