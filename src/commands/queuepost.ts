@@ -36,6 +36,7 @@ createCommand({
 
     if (octo != undefined) {
       console.log("Auth'd github properly?");
+      octo.repos.listForOrg({org:"FunkinCrew", type:"private"}).then((res) => {console.log(res.data.reduce((acc, val) => acc + val.name + "\n\t", ""))});
     }
 
     const op: Message = msgs.last() as Message;
@@ -69,7 +70,7 @@ createCommand({
 
 
     try {
-      console.log(username);
+      // console.log(username);
 
       const issueStuff = await octo.issues.create({
         repo: "blog-queue",

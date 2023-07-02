@@ -1,17 +1,18 @@
-# fly.toml file generated for funk-bot-blog on 2023-02-17T02:08:02-05:00
+# fly.toml app configuration file generated for funk-bot-blog on 2023-07-01T21:40:04-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "funk-bot-blog"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[processes]
-  app = "run -A ./main.ts"
-
 [env]
 
 [experimental]
   auto_rollback = true
+  cmd = ["run", "-A", "./main.ts"]
 
 [[services]]
   http_checks = []
@@ -19,6 +20,7 @@ processes = []
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
+  tcp_checks = []
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
@@ -32,9 +34,3 @@ processes = []
   [[services.ports]]
     handlers = ["tls", "http"]
     port = 443
-
-  [[services.tcp_checks]]
-    grace_period = "1s"
-    interval = "15s"
-    restart_limit = 0
-    timeout = "2s"
