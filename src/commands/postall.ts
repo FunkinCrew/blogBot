@@ -37,7 +37,7 @@ import {
       // msgs.last()?.content
       // channel.name
     
-      const privateKeyShit:string = configs.privateGH as string;
+      const privateKeyShit:string = configs.gh as string;
       console.log(privateKeyShit);
         
       const octo = new Octokit({
